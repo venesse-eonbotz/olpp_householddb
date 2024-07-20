@@ -1,0 +1,99 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Admin {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="py-4">
+      <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+          <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+              <li class="breadcrumb-item">
+                  <a href="#">
+                      <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                  </a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Household DB</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Admin</li>
+          </ol>
+      </nav>
+<!--      <div class="d-flex justify-content-between w-100 flex-wrap">-->
+<!--          <div class="mb-3 mb-lg-0">-->
+<!--              <h1 class="h4">Add Admin Form</h1>-->
+<!--              <p class="mb-0">Dozens of reusable components built to provide buttons, alerts, popovers, and more.</p>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--              <a href="https://themesberg.com/docs/volt-bootstrap-5-dashboard/components-forms/" class="btn btn-outline-gray"><i class="far fa-question-circle me-1"></i> Forms Docs</a>-->
+<!--          </div>-->
+<!--      </div>-->
+  </div>
+
+  <div class="row">
+      <div class="col-12 mb-4">
+          <form action="" method="post" class="card shadow-sm p-3 pb-4 mb-4">
+              {% csrf_token %}
+              <div class="card-header border-gray-400 mx-lg-4 p-0 py-3 py-lg-4 mb-4 mb-md-0">
+                  <h3 class="h5 mb-0">Admin Information</h3>
+              </div>
+              <div class="card-body p-0 p-md-4">
+                  <div class="row">
+                      <div class="col-lg-4 col-sm-6">
+                          <!-- Form -->
+                          <div class="form-group mb-4">
+                              <label>Name</label>
+                              <input type="text" name="name" class="form-control" value="" required>
+                          </div>
+                          <!-- End of Form -->
+                      </div>
+                      <div class="col-lg-4 col-sm-6">
+                          <!--Form-->
+                          <label>Role</label>
+                          <input type="text" name="userrole" class="form-control" value="" required>
+                          <!-- End of Form -->
+                      </div>
+                      <div class="col-lg-4 col-sm-6">
+                          <!--Form-->
+                          <label>Status</label>
+                          <select class="form-select mb-4" name="status" required>
+                              <option value="Active">Active</option>
+                              <option value="Inactive">Inactive</option>
+                              <option selected="" hidden="">Open this select menu</option>
+                          </select>
+                          <!-- End of Form -->
+                      </div>
+                      <div class="col-lg-4 col-sm-6">
+                          <!-- Form -->
+                          <div class="form-group mb-4">
+                              <label>Username</label>
+                              <input type="text" name="username" class="form-control" value="" required>
+                          </div>
+                          <!-- End of Form -->
+                      </div>
+                      <div class="col-lg-4 col-sm-6">
+                          <!-- Form -->
+                          <div class="form-group mb-4">
+                              <label>Password</label>
+                              <div class="input-group">
+                                  <input type="text" class="form-control" name="password" required>
+                                  <span class="input-group-text" id="basic-addon3">
+                                      <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                                  </span>
+                              </div>
+                          </div>
+                          <!-- End of Form -->
+                      </div>
+                      <div class="col-12">
+                          <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Save</button>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

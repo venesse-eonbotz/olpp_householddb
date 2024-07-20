@@ -1,0 +1,128 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Records {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div class="d-block mb-4 mb-md-0">
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+              <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                  <li class="breadcrumb-item">
+                      <a href="#">
+                          <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                      </a>
+                  </li>
+                  <li class="breadcrumb-item"><a href="#">Household DB</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Records</li>
+              </ol>
+          </nav>
+          <h2 class="h4">Records</h2>
+      </div>
+      {% if request.session.login_info.userrole %}
+      <div class="btn-toolbar mb-2 mb-md-0">
+          <a href="/add_record/" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+              <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+              Add Record
+          </a>
+<!--          <div class="btn-group ms-2 ms-lg-3">-->
+<!--              <a type="button" class="btn btn-sm btn-outline-gray-600">Advance</a>-->
+<!--              <button type="button" class="btn btn-sm btn-outline-gray-600">Export</button>-->
+<!--          </div>-->
+      </div>
+      {% endif %}
+  </div>
+  <div class="card card-body border-0 ">
+      <table class="table table-hover" id="userTable" data-filter-control="true" data-show-search-clear-button="true">
+          <thead class="thead-light">
+              <tr>
+                  <th class="border-0 rounded-start">Date</th>
+                  {% if request.session.login_info.userrole %}
+                  <th class="border-0">User</th>
+                  <th class="border-0">Role</th>
+                  {% endif %}
+                  <th class="border-0 rounded-end">No of Survey</th>
+              </tr>
+          </thead>
+          <tbody>
+              <!-- Item -->
+              {% for obj in rec %}
+              <tr>
+                  <td>{{ obj.date }}</td>
+                  {% if request.session.login_info.userrole %}
+                  <td class="d-flex align-items-center">
+                      <div class="avatar avatar-xs me-2">
+                          {% if obj.user.gender == "Female" %}
+                          <img src="/static/assets/img/profiles/4.png" alt="Avatar" class="rounded-circle">
+                          {% else %}
+                          <img src="/static/assets/img/profiles/1.png" alt="Avatar" class="rounded-circle">
+                          {% endif %}
+                      </div>
+                      <div class="me-2">
+                        {{ obj.user.firstname }} {{ obj.user.lastname }}
+                      </div>
+                  </td>
+                  <td>
+                      {% if obj.user.role == "Checker" %}
+<!--                      <span class="fas fa-desktop" style="color: #FF4C51"></span>&nbsp {{ obj.role }}-->
+                      <span class="fas fa-user-check" style="color: #FF4C51"></span>&nbsp {{ obj.user.role }}
+                      {% elif obj.user.role == "Encoder" %}
+                      <span class="	fas fa-user-edit" style="color:#16B1FF;"></span>&nbsp {{ obj.user.role }}
+                      {% endif %}
+                  </td>
+                  {% endif %}
+                  <td>{{ obj.no_of_survey }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+
+  <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h2 class="h6 modal-title">Advance Settings</h2>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="form-group mb-4">
+                      <label>Barangay</label>
+                      <div class="input-group">
+                          <span class="input-group-text" id="basic-addon2">
+                              <span class="fas fa-building"></span>
+                          </span>
+                          <select class="form-control" name="barangay">
+                              {% for obj in brgy %}
+                                  {% if obj in brgy.all %}
+                                  <option selected value="{{ obj.id }}">{{ obj.name }}</option>
+                                  {% else %}
+                                  <option selected value="{{ obj.id }}">{{ obj.name }}</option>
+                                  {% endif %}
+                                  {% endfor %}
+                          </select>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary">Accept</button>
+                  <button type="button" class="btn btn-link text-gray-600 ms-auto" data-bs-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock content %}
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

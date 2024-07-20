@@ -1,0 +1,251 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Schedule {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div class="d-block mb-4 mb-md-0">
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+              <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                  <li class="breadcrumb-item">
+                      <a href="#">
+                          <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                      </a>
+                  </li>
+                  <li class="breadcrumb-item"><a href="#">Household DB</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Schedule</li>
+              </ol>
+          </nav>
+          <div class="d-lg-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+              <div class="col-auto d-flex justify-content-between ps-0 mb-4 mb-lg-0">
+                  <div class="me-lg-3">
+                      <a href="/schedule/add/" class="btn btn-secondary text-dark"><span class="fas fa-plus me-2"></span><span>New Tasks</span></a>
+                  </div>
+<!--                  <div class="btn-group">-->
+<!--                      <a type="button" class="btn btn-dark btn-outline-gray-600" data-bs-toggle="modal" data-bs-target="#">Advance</a>-->
+<!--                      <a type="button" class="btn btn-dark btn-outline-gray-600">Export</a>-->
+<!--                  </div>-->
+              </div>
+          </div>
+      </div>
+
+
+      <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="mb-0">
+                  <form method="GET" action="">
+                      <div class="input-group">
+                          <span class="input-group-text" id="basic-addon3"><span class="fas fa-search"></span></span>
+    <!--                      <input type="text" class="form-control" onkeyup="myFunction()" id="Search" placeholder="Search Tasks Here" aria-label="Search" aria-describedby="basic-addon3">-->
+                            <input type="text" class="form-control" name="q" placeholder="Search Tasks Here" aria-label="Search" aria-describedby="basic-addon3">
+                      </div>
+                  </form>
+              </div>
+      </div>
+  </div>
+
+
+  <div class="grid task-wrapper border bg-white shadow-sm rounded">
+    {% for obj in items %}
+      <div class="card hover-state border-bottom rounded-0 {% if forloop.counter0 == 0 %} rounded-top {% endif %} py-3">
+          <div class="card-body d-sm-flex align-items-center flex-wrap flex-lg-nowrap py-0">
+              <div class="col-1 text-left text-sm-center mb-2 mb-sm-0">
+                  <div class="form-check check-lg inbox-check me-sm-2">
+                      <input class="form-check-input" type="checkbox" value="" id="mailCheck1" checked="">
+                      <label class="form-check-label" for="mailCheck1"></label>
+                  </div>
+              </div>
+              <div class="col-11 col-lg-8 px-0 mb-4 mb-md-0">
+                  <div class="">
+                      <h3 class="h5">{{ obj.task }}</h3>
+<!--                      <div class="d-block d-sm-flex">-->
+<!--                          <div class="d-block">-->
+<!--                              <small class="fw-normal text-gray mb-3 mb-sm-0 justify-content-center">-->
+<!--                                  <span class="fas fa-clock me-2"></span>{{ obj.datetime }}-->
+<!--                              </small>-->
+<!--                          </div>-->
+<!--                          <div class="small">-->
+<!--                          </div>-->
+<!--                      </div>-->
+                      <div class="d-flex flex-wrap align-items-center">
+                          <div class="avatar avatar-xs me-2 mb-3">
+                              {% if obj.user.gender == "Female" %}
+                              <img src="/static/assets/img/profiles/4.png" alt="Avatar" class="rounded-circle">
+                              {% else %}
+                              <img src="/static/assets/img/profiles/1.png" alt="Avatar" class="rounded-circle">
+                              {% endif %}
+                          </div>
+                          <div class="me-2">
+                              <small>Incharge: {{ obj.user.firstname }} {{ obj.user.lastname }}</small>
+                              <p class="small">{{ obj.datetime }}</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div>
+                      <a href="./single-message.html" class="fw-bold text-dark">
+                          <span class="fw-normal text-gray">{{ obj.description }}</span>
+                      </a>
+                  </div>
+              </div>
+              <div class="col-10 col-sm-2 col-lg-2 col-xl-2 d-none d-lg-block d-xl-inline-flex align-items-center ms-lg-auto text-right justify-content-end px-md-0">
+                  <div class="rating-star star-lg d-none d-lg-inline-block">
+<!--                      <input type="checkbox" id="InboxStar1" name="star">-->
+<!--                      <label class="rating-star-label" for="InboxStar1">-->
+<!--                          <span class="sr-only">Star</span>-->
+<!--                      </label>-->
+                      <span class="badge mt-1 super-badge {% if obj.datetime.date <= date_today %}bg-success{% elif obj.datetime.date == date_today %}bg-warning{% else %}bg-gray-500{% endif %}">
+                      {% if obj.datetime.date <= date_today %}
+                        Done
+                      {% elif obj.datetime.date == date_today %}
+                        In Progress
+                      {% else %}
+                        Upcoming
+                      {% endif %}
+                      </span>
+                  </div>
+                  <div class="btn-group ms-md-3">
+                      <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="icon icon-sm">
+                              <span class="fas fa-ellipsis-h icon-dark"></span>
+                          </span>
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end py-0" style="">
+                          <a class="dropdown-item rounded-top" href="/schedule/{{ obj.id }}/edit/"><span class="fas fa-edit"></span>Edit</a>
+                          <a class="dropdown-item text-warning" href="#"><span class="fas fa-star"></span>Important</a>
+                          <a class="dropdown-item text-danger rounded-bottom" href="#"><span class="fas fa-trash-alt"></span>Delete</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    {% endfor %}
+      <div class="row p-4">
+          <div class="col-7 mt-1">
+              Page {{ items.number }} of {{ items.paginator.num_pages }}
+          </div>
+          <div class="col-5">
+              <div class="btn-group float-end">
+                  {% if items.has_previous %}
+                  <a href="?q={{ request.GET.q }}&page={{ items.previous_page_number }}" class="btn btn-secondary"><span class="fas fa-chevron-left"></span></a>
+                  <a href="" class="btn btn-gray-200 disabled"><span class="fas fa-chevron-right"></span></a>
+
+                  {% elif items.has_next %}
+                  <a href="" class="btn btn-gray-200 disabled"><span class="fas fa-chevron-left"></span></a>
+                  <a href="?q={{ request.GET.q }}&page={{ items.next_page_number }}" class="btn btn-secondary"><span class="fas fa-chevron-right"></span></a>
+                  {% else %}
+                  <a class="btn btn-gray-200 disabled"><span class="fas fa-chevron-left"></span></a>
+                  <a class="btn btn-gray-200 disabled"><span class="fas fa-chevron-right"></span></a>
+                  {% endif %}
+              </div>
+          </div> <!-- end col-->
+      </div>
+  </div>
+
+
+  <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h2 class="h6 modal-title">Advance Settings</h2>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="form-group mb-4">
+                      <label>Barangay</label>
+                      <div class="input-group">
+                          <span class="input-group-text" id="basic-addon2">
+                              <span class="fas fa-building"></span>
+                          </span>
+                          <select class="form-control" name="barangay">
+                              {% for obj in brgy %}
+                                  {% if obj in brgy.all %}
+                                    <option selected value="{{ obj.id }}">{{ obj.name }}</option>
+                                  {% else %}
+                                    <option selected value="{{ obj.id }}">{{ obj.name }}</option>
+                                  {% endif %}
+                              {% endfor %}
+                          </select>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary">Accept</button>
+                  <button type="button" class="btn btn-link text-gray-600 ms-auto" data-bs-dismiss="modal">Close</button>
+              </div>
+          </div>
+      </div>
+<!--      <script>-->
+<!--    // Number of characters to display in short version-->
+<!--    const maxLength = 20;-->
+
+<!--    // Get the table cell element-->
+<!--    const cell = document.getElementById('text-cell');-->
+<!--    const fullText = cell.innerText;-->
+
+<!--    // Function to initialize the text content with "Show More" and "Show Less" functionality-->
+<!--    function initializeText() {-->
+<!--        if (fullText.length > maxLength) {-->
+<!--            cell.innerHTML = `-->
+<!--                <span id="short-text">${fullText.substring(0, maxLength)}...</span>-->
+<!--                <span id="full-text" style="display: none;">${fullText}</span>-->
+<!--                <span class="toggle-button" id="show-more" onclick="toggleText('more')">Show More</span>-->
+<!--                <span class="toggle-button" id="show-less" onclick="toggleText('less')" style="display: none;">Show Less</span>-->
+<!--            `;-->
+<!--        }-->
+<!--    }-->
+
+<!--    // Function to toggle text between short and full-->
+<!--    function toggleText(action) {-->
+<!--        const shortTextElem = document.getElementById('short-text');-->
+<!--        const fullTextElem = document.getElementById('full-text');-->
+<!--        const showMoreBtn = document.getElementById('show-more');-->
+<!--        const showLessBtn = document.getElementById('show-less');-->
+
+<!--        if (action === 'more') {-->
+<!--            shortTextElem.style.display = "none";-->
+<!--            fullTextElem.style.display = "inline";-->
+<!--            showMoreBtn.style.display = "none";-->
+<!--            showLessBtn.style.display = "inline";-->
+<!--        } else if (action === 'less') {-->
+<!--            shortTextElem.style.display = "inline";-->
+<!--            fullTextElem.style.display = "none";-->
+<!--            showMoreBtn.style.display = "inline";-->
+<!--            showLessBtn.style.display = "none";-->
+<!--        }-->
+<!--    }-->
+
+<!--    // Initialize the text content on page load-->
+<!--    initializeText();-->
+<!--</script>-->
+      <script>
+          function myFunction() {
+              var input = document.getElementById("Search");
+              var filter = input.value.toLowerCase();
+              var nodes = document.getElementsByClassName('grid');
+
+              for (i = 0; i < nodes.length; i++) {
+                if (nodes[i].innerText.toLowerCase().includes(filter)) {
+                  nodes[i].style.display = "block";
+                } else {
+                  nodes[i].style.display = "none";
+                }
+              }
+            }
+      </script>
+  </div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+{% endblock content %}
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

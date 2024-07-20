@@ -1,0 +1,135 @@
+
+<!-- Core -->
+<script src="/static/assets/vendor/@popperjs/core/dist/umd/popper.min.js"></script>
+<script src="/static/assets/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Vendor JS -->
+<script src="/static/assets/vendor/onscreen/dist/on-screen.umd.min.js"></script>
+
+<!-- Slider -->
+<script src="/static/assets/vendor/nouislider/distribute/nouislider.min.js"></script>
+
+<!-- Smooth scroll -->
+<script src="/static/assets/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+
+<!-- Charts -->
+<script src="/static/assets/vendor/chartist/dist/chartist.min.js"></script>
+<script src="/static/assets/vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+
+<!-- Datepicker -->
+<script src="/static/assets/vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
+
+<!-- Sweet Alerts 2 -->
+<script src="/static/assets/vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
+
+<!-- Moment JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+
+<!-- Vanilla JS Datepicker -->
+<script src="/static/assets/vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
+
+<!-- Notyf -->
+<script src="/static/assets/vendor/notyf/notyf.min.js"></script>
+
+<!-- Simplebar -->
+<script src="/static/assets/vendor/simplebar/dist/simplebar.min.js"></script>
+
+<!-- Github buttons -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Volt JS -->
+<script src="/static/assets/js/volt.js"></script>
+<script src="/static/assets/js/table.js"></script>
+
+<!-- Datatable -->
+<!--<script src="/static/assets/vendor/datatables/jquery.dataTables.min.js' %} "></script>-->
+<!--<script src="/static/assets/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>-->
+<!--<script src="/static/assets/js/demo/datatables-demo.js' %}"></script>-->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    var dataTable = $('#userTable').dataTable();
+    $("#searching").keyup(function() {
+        dataTable.fnFilter(this.value);
+    });
+  })
+</script>
+
+<!--<script src="https://unpkg.com/@adminkit/core@latest/dist/js/app.js"></script>-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+
+<script>
+    new Chart(document.getElementById("chartjs-line"), {
+      type: "bar",
+      data: {
+        labels: [{% for obj in name %}"{{ obj.name }} {% if '1' in segment %}- {{ obj.location }} {% endif %}",{% endfor %}],
+
+        datasets: [{
+          label: "population",
+          backgroundColor: "#1F2937",
+          borderColor: "#1F2937",
+          hoverBackgroundColor: "#1F2937",
+          hoverBorderColor: "#1F2937",
+          data: [{% for obj in count %}{{ obj.total }}, {% endfor %}],
+          barPercentage: .75,
+          categoryPercentage: .5
+        },
+        {
+          label: "catholic residence",
+          backgroundColor: "#F8BD7A",
+          borderColor: "#F8BD7A",
+          hoverBackgroundColor: "#F8BD7A",
+          hoverBorderColor: "#F8BD7A",
+          data: [{% for obj in stats %}{{ obj.total }}, {% endfor %}],
+            backgroundColor: [
+                '#F8BD7A',
+            ],
+          barPercentage: .75,
+          categoryPercentage: .5
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            grid: {
+              display: false,
+              drawBorder: false,
+            },
+          ticks: {
+                beginAtZero: true,
+                // display: false,
+                drawBorder: false,
+            },
+          border: {
+            display: false // remove border lines
+            }
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              borderDash: [3,4],
+              color: "#ffc371"
+            }
+          }
+        },
+      }
+    });
+</script>
+
+<script>
+const togglePassword = document.querySelector("#togglePassword");
+const password = document.querySelector("#password");
+
+togglePassword.addEventListener("click", function () {
+
+  // toggle the type attribute
+  const type = password.getAttribute("type") === "password" ? "text" : "password";
+  password.setAttribute("type", type);
+  // toggle the eye icon
+  this.classList.toggle('fa-eye');
+  this.classList.toggle('fa-eye-slash');
+});
+</script>

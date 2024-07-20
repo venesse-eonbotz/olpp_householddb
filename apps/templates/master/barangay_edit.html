@@ -1,0 +1,183 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Barangay {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="py-4">
+      <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+          <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+              <li class="breadcrumb-item">
+                  <a href="#">
+                      <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                  </a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Household DB</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Barangay</li>
+          </ol>
+      </nav>
+      <div class="d-flex justify-content-between w-100 flex-wrap">
+          <div class="mb-3 mb-lg-0">
+              <h1 class="h4">{{ query.name }} - Information</h1>
+<!--              <p class="mb-0">Dozens of reusable components built to provide buttons, alerts, popovers, and more.</p>-->
+          </div>
+          <div>
+                <a type="button" class="btn btn-sm btn-outline-primary" href="/barangay/{{ query.id }}/export_to_word/">
+                    <span class="fas fa-download m-lg-1"></span>Export
+                </a>
+          </div>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-12  col-xl-4 mb-4">
+          <div class="card border-0 shadow components-section">
+              <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                  <div class="row">
+                      <div class="mb-3">
+                          <label>Name of Barangay</label>
+                          <input type="text" name="name" class="form-control" value="{{ query.name }}" required>
+                      </div>
+                      <div class="mb-3">
+                          <label>Location</label>
+                          <input type="text" name="location" class="form-control" value="{{ query.location }}" required>
+                      </div>
+                      <div class="mb-3">
+                          <label>Barangay Captain</label>
+                          <input type="text" name="brgy_captain" class="form-control" value="{{ query.brgy_captain }}" required>
+                      </div>
+                  </div>
+                  <div class="mt-1">
+                      <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Save</button>
+                  </div>
+                </form>
+              </div>
+          </div>
+      </div>
+      <div class="col-12 col-xl-8">
+            <div class="col-12 px-0">
+                <div class="card border-0 shadow">
+                    <div class="card-body">
+                        <h2 class="fs-5 fw-bold mb-1">Statistics Overview</h2>
+                        <p>This is the real-time data of {{ query.name }}, with total number of <span class="fw-bolder">{{ household }}</span> households. Numbers are based during surveys. It can only be changed when new survey form was submitted.</p>
+                        <div class="row">
+                            <!--              old: col-7 col-xl-4              -->
+                            <div class="col-6 col-xl-4 d-flex align-items-center pt-3">
+                                <div class="icon-shape fw-extrabold icon-sm icon-shape-success rounded me-3">
+                                    {{ population }}%
+<!--                                    <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"></path></svg>-->
+                                </div>
+                                <div class="d-block">
+                                    <label class="mb-0">Population</label><br>
+                                    <label class="mb-0 h4">{{ query.population }}</label>
+<!--                                    <span class="small d-inline text-info" style="">~ {{ population }}%</span>-->
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-4 d-flex align-items-center pt-3">
+                                <div class="icon-shape fw-extrabold icon-sm icon-shape-success rounded me-3">
+                                    {{ lumon }}%
+<!--                                    <svg fill="currentColor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <polygon points="451.368,229.053 451.368,168.421 410.947,168.421 410.947,229.053 350.316,229.053 350.316,269.474 410.947,269.474 410.947,330.105 451.368,330.105 451.368,269.474 512,269.474 512,229.053 "></polygon> </g> </g> <g> <g> <path d="M239.915,276.724c33.652-18.238,56.506-53.864,56.506-94.829c0-59.531-48.259-107.789-107.789-107.789 S80.842,122.364,80.842,181.895c0,40.965,22.854,76.591,56.506,94.829C66.732,283.298,0,352.877,0,437.895h377.263 C377.263,352.877,310.531,283.298,239.915,276.724z"></path> </g> </g> </g></svg>-->
+                                </div>
+                                <div class="d-block">
+                                    <label class="mb-0">Lumon</label><br>
+                                    <label class="mb-0 h4">{{ query.lumon }}</label>
+<!--                                    <span class="small d-inline text-info" style="">~ {{ lumon }}%</span>-->
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-4 d-flex align-items-center pt-3">
+                                <div class="icon-shape fw-extrabold icon-sm icon-shape-success rounded me-3">
+                                    {{ catholic }}%
+<!--                                    <svg fill="currentColor" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Church"> <path d="M471.9516,376.3949l-129.9583-57.74V273.9013l18.2527,20.4465a13.2774,13.2774,0,0,0,9.829,4.3875,12.9429,12.9429,0,0,0,8.775-3.3335,13.1823,13.1823,0,0,0,1.054-18.604L269.1625,152.5424V104.6313h26.325a13.1626,13.1626,0,0,0,0-26.3251h-26.325V51.9813a13.1625,13.1625,0,0,0-26.325,0V78.3062h-26.325a13.1626,13.1626,0,0,0,0,26.3251h26.325v47.9111L132.096,276.7978a13.1761,13.1761,0,1,0,19.658,17.55l18.2527-20.5322v44.8391l-129.9583,57.74A13.1617,13.1617,0,0,0,45.4,401.58a12.7221,12.7221,0,0,0,5.3516-1.144l20.9734-9.3021v68.8675a13.1786,13.1786,0,0,0,13.18,13.18H212.0779a.0475.0475,0,0,0,.0471-.0471V396.3186c0-24.9711,20.4464-46.8143,45.4-45.9616a44.0528,44.0528,0,0,1,42.35,43.8493v78.9749H427.1425a13.1311,13.1311,0,0,0,13.1325-13.1325V391.1341l20.9734,9.3021a13.1581,13.1581,0,1,0,10.7032-24.0413ZM281.8408,277.7318a26.3482,26.3482,0,1,1-30.9867-30.9867A26.3122,26.3122,0,0,1,281.8408,277.7318Z"></path> </g> </g></svg>-->
+                                </div>
+                                <div class="d-block">
+                                    <label class="mb-0">Catholic</label><br>
+                                    <label class="mb-0 h4">{{ query.catholic }}</label>
+<!--                                    <span class="small d-inline text-info" style="">~ {{ catholic }}%</span>-->
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-4 d-flex align-items-center pt-3">
+                                <div class="icon-shape fw-extrabold icon-sm icon-shape-danger rounded me-3">
+                                    {{ not_baptized }}%
+<!--                                    <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"></path></svg>-->
+                                </div>
+                                <div class="d-block">
+                                    <label class="mb-0">NOT Baptized</label><br>
+                                    <label class="mb-0 h4">{{ query.not_baptized }}</label>
+<!--                                    <span class="small d-inline text-info" style="">~ {{ not_baptized }}%</span>-->
+                                </div>
+                            </div>
+
+                            <div class="col-6 col-xl-4 d-flex align-items-center pt-3">
+                                <div class="icon-shape fw-extrabold icon-sm icon-shape-danger rounded me-3">
+                                    {{ not_confirmed }}%
+<!--                                    <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"></path></svg>-->
+                                </div>
+                                <div class="d-block">
+                                    <label class="mb-0">NOT Confirmed</label><br>
+                                    <label class="mb-0 h4">{{ query.not_confirmed }}</label>
+<!--                                    <span class="small d-inline text-info" style="">~ {{ not_confirmed }}%</span>-->
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-4 d-flex align-items-center pt-3">
+                                <div class="icon-shape fw-extrabold icon-sm icon-shape-danger rounded me-3">
+                                    {{ not_married }}%
+<!--                                    <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"></path></svg>-->
+                                </div>
+                                <div class="d-block">
+                                    <label class="mb-0">NOT Married</label><br>
+                                    <label class="mb-0 h4">{{ query.not_married }}</label>
+<!--                                    <span class="small d-inline text-info" style="">~ {{ not_married }}%</span>-->
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-4 d-flex align-items-center pt-3">
+                                <div class="icon-shape fw-extrabold icon-sm icon-shape-success rounded me-3">
+                                    {{ professionals }}%
+<!--                                    <svg fill="currentColor" width="200px" height="200px" viewBox="0 0 460.873 460.873" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M216.5,80.169c22.102,0,40.084-17.982,40.084-40.084C256.584,17.982,238.602,0,216.5,0 c-22.097,0-40.074,17.982-40.074,40.084C176.426,62.187,194.403,80.169,216.5,80.169z"></path> <path d="M386.039,180.178l-28.902-28.9c-1.649-1.649-3.849-2.558-6.193-2.558c-2.345,0-4.544,0.909-6.193,2.558l-8.463,8.462 c-0.348-0.406-0.694-0.811-1.076-1.193c-3.623-3.625-8.435-5.703-13.635-5.961c-0.309-0.535-0.643-1.06-1.017-1.569l-13.768-18.771 c-3.971-5.414-11.031-12.517-16.425-16.521l-36.486-27.085c-1.164-0.858-5.064-3.34-9.269-3.34c0,0-51.336,0.012-51.436,0.015 c-5.96,0.129-10.318,3.365-13.304,9.898l-15.724,34.394c-0.333,0.422-1.266,1.188-1.744,1.432l-32.047,7.624 c-4.408,1.049-8.144,3.751-10.519,7.609c-2.375,3.858-3.105,8.411-2.057,12.818c1.826,7.678,8.606,13.04,16.488,13.04 c1.317,0,2.643-0.156,3.939-0.464l32.354-7.697c10.027-2.385,20.022-10.598,24.307-19.971l1.338-2.926l8.72,34.247l-22.551,19.587 c-8.741,7.591-13.23,20.817-10.916,32.163l10.453,51.215c1.693,8.293,9.056,14.312,17.507,14.311c1.199,0,2.408-0.123,3.594-0.364 c9.662-1.973,15.918-11.438,13.946-21.1l-10.209-50.018l23.322-20.257c0.619-0.538,1.174-1.119,1.701-1.719h17.158l11.561,43.137 c1.673,6.241,5.252,15.227,8.325,20.902l25.384,46.884c3.132,5.781,9.164,9.373,15.743,9.373c0.322,0,0.646-0.009,0.968-0.026 c2.647-0.145,5.183-0.862,7.531-2.134c8.672-4.695,11.908-15.57,7.214-24.243l-25.387-46.886c-1.771-3.272-4.264-9.531-5.231-13.14 l-24.252-89.539c2.739,2.196,6.808,6.338,8.645,8.844l13.767,18.771c1.191,1.623,2.651,3.002,4.297,4.091 c-0.101,5.763,2.01,11.112,5.993,15.095c0.381,0.381,0.785,0.731,1.191,1.078l-8.461,8.46c-3.415,3.415-3.415,8.973,0,12.388 l28.9,28.9c1.65,1.649,3.849,2.558,6.193,2.558h0.001c2.343,0,4.542-0.909,6.192-2.558l48.529-48.527 C389.454,189.15,389.454,183.593,386.039,180.178z M310.851,182.906c-1.358-1.358-2.266-3.061-2.688-4.944 c3.16-0.234,6.162-1.339,8.748-3.235c3.834-2.811,6.133-6.943,6.748-11.316c1.587,0.482,3.021,1.326,4.191,2.496 c0.384,0.384,0.721,0.802,1.033,1.236l-16.797,16.797C311.652,183.627,311.234,183.289,310.851,182.906z"></path> <path d="M140.952,260.554H82.567c-5.677,0-10.295,4.618-10.295,10.294v179.73c0,5.676,4.618,10.294,10.295,10.294h58.385 c5.677,0,10.295-4.618,10.295-10.294v-179.73C151.247,265.172,146.629,260.554,140.952,260.554z"></path> <path d="M233.718,299.512h-58.385c-5.677,0-10.295,4.618-10.295,10.294v140.772c0,5.676,4.618,10.294,10.295,10.294h58.385 c5.677,0,10.295-4.618,10.295-10.294V309.806C244.013,304.13,239.394,299.512,233.718,299.512z"></path> <path d="M326.48,325.506h-58.382c-5.677,0-10.295,4.618-10.295,10.294v114.778c0,5.676,4.618,10.294,10.295,10.294h58.382 c5.677,0,10.296-4.618,10.296-10.294V335.8C336.776,330.124,332.157,325.506,326.48,325.506z"></path> </g> </g></svg>-->
+                                </div>
+                                <div class="d-block">
+                                    <label class="mb-0">Professionals</label><br>
+                                    <label class="mb-0 h4">{{ query.professionals }}</label>
+<!--                                    <span class="small d-inline text-info" style="">~ {{ professionals }}%</span>-->
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-4 d-flex align-items-center pt-3">
+                                <div class="icon-shape fw-extrabold icon-sm icon-shape-danger rounded me-3">
+                                    {{ stop_highschool }}%
+<!--                                    <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"></path></svg>-->
+                                </div>
+                                <div class="d-block">
+                                    <label class="mb-0">STOP HS</label><br>
+                                    <label class="mb-0 h4">{{ query.stop_highschool }}</label>
+<!--                                    <span class="small d-inline text-info" style="">~ {{ stop_highschool }}%</span>-->
+                                </div>
+                            </div>
+                            <div class="col-6 col-xl-4 d-flex align-items-center pt-3">
+                                <div class="icon-shape fw-extrabold icon-sm icon-shape-danger rounded me-3">
+                                    {{ stop_college }}%
+<!--                                    <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"></path></svg>-->
+                                </div>
+                                <div class="d-block">
+                                    <label class="mb-0">STOP College</label><br>
+                                    <label class="mb-0 h4">{{ query.stop_college }}</label>
+<!--                                    <span class="small d-inline text-info" style="">~ {{ stop_college }}%</span>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      </div>
+  </div>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}

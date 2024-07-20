@@ -1,0 +1,200 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Households {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>
+      $(document).ready(function()
+      {
+          $('.chkvalues').click(function()
+          {
+              var txt="";
+              $('.chkvalues:checked').each(function()
+              {
+                  txt+=$(this).val()+",";
+              })
+                $('#txtdisplay').val(txt);
+          });
+
+          var table = $('#userTable').DataTable({
+          });
+
+          $('#select_all').on('click', function () {
+            $(':checkbox', table.rows().nodes()).prop('checked', this.checked);
+            console.log('this is table ' + table);
+          });
+      });
+
+      document.getElementById('selectAllCheckbox')
+      .addEventListener('change', function () {
+        let checkboxes = document.querySelectorAll('.checkboxes');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = this.checked;
+        }, this);
+      });
+  </script>
+<form method="POST" action="/household/bulk-approval/">
+  {% csrf_token %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+      <div class="d-block mb-4 mb-md-0">
+          <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+              <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                  <li class="breadcrumb-item">
+                      <a href="#">
+                          <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                      </a>
+                  </li>
+                  <li class="breadcrumb-item"><a href="#">Household DB</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Households</li>
+              </ol>
+          </nav>
+          <h2 class="h4">Households</h2>
+          <p class="mb-0">This page includes
+              {% if 'approvals' in segment %}<a href="/household/approval/list/" class="text-info">{% else %}<a href="/households/" class="text-info">{% endif %}Households</a> and
+              {% if 'approvals' in segment %}<a href="/household/lumon/approval/list/" class="text-info">{% else %}<a href="/lumon/" class="text-info">{% endif %}Lumon</a>.
+          </p>
+      </div>
+      <div class="btn-toolbar mb-2 mb-md-0">
+          {% if 'approvals' in segment %}
+              <button href="/household/bulk-approval/" type="submit" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+                  <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                  Bulk Approval</button>
+          {% else %}
+          {% if request.session.login_info.role %}
+          <a href="/add_households/" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+              <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+              Add Household</a>
+          {% endif %}
+          <div class="btn-group ms-2 ms-lg-3">
+              <a type="button" class="btn btn-sm btn-outline-gray-600" data-bs-toggle="modal" data-bs-target="#modal-default">
+                  <span class="fa fa-cog m-lg-1"></span>Advance</a>
+              <a type="button" class="btn btn-sm btn-outline-gray-600" href="/households/export_to_csv/">
+                  <span class="fas fa-file-excel m-lg-1"></span>Export</a>
+          </div>
+          {% endif %}
+      </div>
+  </div>
+
+  <div class="card card-body border-0 shadow-sm table-wrapper table-responsive">
+      <table class="table table-hover" id="userTable" data-filter-control="true" data-show-search-clear-button="true">
+          <thead class="thead-light">
+              <tr>
+                  {% if 'approvals' in segment %}
+                  <th class="border-0 rounded-start"><input id="select_all" name="ids" aria-describedby="checkbox-1" type="checkbox"></th>
+                  {% endif %}
+                  {% if 'approvals' in segment %}
+                  <th class="border-0"></th>{% else %}<th class="border-0 rounded-start"></th>
+                  {% endif %}
+                  <th class="border-0">Family Name</th>
+                  <th class="border-0">Barangay</th>
+                  <th class="border-0">Address</th>
+                  <th class="border-0">Members</th>
+                  <th class="border-0">Catholic</th>
+                  <th class="border-0 rounded-end">Mass Attendance</th>
+              </tr>
+          </thead>
+          <tbody>
+              <!-- Item -->
+              {% for obj in household %}
+              <tr>
+                  {% if 'approvals' in segment %}<td><input class="chkvalues" type="checkbox"  name="object_ids" value="{{obj.id}}"></td>{% endif %}
+                  <td style="width: 2px">
+                      {% if 'approvals' in segment %}
+                      <a  href="/household/{{ obj.id }}/approval/view/"><span class="fas fa-search-plus" style=""></span></a>
+                      {% else %}
+                      <a  href="/household/{{ obj.id }}/view/"><span class="fas fa-search-plus" style=""></span></a>
+                      {% endif %}
+                  </td>
+                  <td>{{ obj.family_name }}</td>
+                  <td>{{ obj.barangay.name }} - {{ obj.barangay.location }}</td>
+                  <td>{{ obj.address }}</td>
+                  <td>{{ obj.members }}</td>
+                  <td>{{ obj.catholic }}</td>
+                  <td>
+                      {% if obj.mass_attendance == "Occasionally" %}
+                      <span class="fas fa-circle-notch text-secondary"></span>&nbsp  {{ obj.mass_attendance }}
+                      {% elif obj.mass_attendance == "Every Sunday" %}
+                      <span class="fas fa-circle-notch text-success"></span>&nbsp  {{ obj.mass_attendance }}
+                      {% elif obj.mass_attendance == "Monthly" %}
+                      <span class="fas fa-circle-notch text-tertiary"></span>&nbsp  {{ obj.mass_attendance }}
+                      {% else %}
+                      <span class="fas fa-circle-notch text-danger"></span>&nbsp  {{ obj.mass_attendance }}
+                      {% endif %}
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+      </form>
+
+  <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h2 class="h6 modal-title">Advance Settings</h2>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="/households/" method="POST">
+                  {% csrf_token %}
+                  <div class="modal-body">
+                      <div class="form-group mb-4">
+                          <label>Select Barangay</label>
+                          <div class="input-group">
+                              <span class="input-group-text" id="basic-addon2">
+                                  <span class="fas fa-building"></span>
+                              </span>
+                              <select class="form-control" name="barangay">
+                                  {% for obj in brgy %}
+                                      {% if obj in brgy.all %}
+                                      <option selected value="{{ obj.name }}">{{ obj.name }}</option>
+                                      {% else %}
+                                      <option selected value="{{ obj.name }}">{{ obj.name }}</option>
+                                      {% endif %}
+                                  {% endfor %}
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="submit" class="btn btn-secondary" >Proceed</button>
+                      <button type="button" class="btn btn-link text-gray-600 ms-auto" data-bs-dismiss="modal">Close</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+{% if messages %}
+    {% for message in messages %}
+    <script>
+        swal.fire({
+                icon: 'success',
+                title: 'Success alert',
+                text: '{{ message }}',
+                showConfirmButton: true,
+                timer: 9000
+            }).then((result) => {
+                if (result.value) {
+                    /*submit the form*/
+                    $("#form").submit();
+                }
+            });
+    </script>
+    {% endfor %}
+{% endif %}
+{% endblock javascripts %}
