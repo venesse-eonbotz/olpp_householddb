@@ -57,4 +57,3 @@ At present, we officially aim to support the last two versions of the following 
 - Copyright 2021 Themesberg (Crafty Dwarf LLC) (https://themesberg.com)
 - Themesberg [license](https://themesberg.com/licensing#mit) (MIT License)
 - Repository Project Copyright 2024 EonBotz Technology (https://eonbotz.com)
-- 
